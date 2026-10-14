@@ -1,0 +1,26 @@
+Bài tập
+1.Giới thiệu
+-Vẽ sơ đồ mô tả luồng dữ liệu khi qua Pipeline PowerShell (Đọc tệp ➔ Lọc từ khóa ➔ Đếm kết quả)
+-Viết câu lệnh nối 3 bước hoàn chỉnh trên PowerShell để trả về con số báo cáo chính xác, xử lý đúng bẫy dữ liệu ở mục 4
+2.Phân tích + giải
+-PS:(get-childitem -filter *.log -r | Select-String "TIMEOUT" | Where-Object { $_ -notmatch "NOT TIMEOUT" }).count
++Get-ChildItem -Filter *.log -r
++Quét tìm tất cả các file .log trong thư mục hiện tại và các thư mục con bên trong (-r)
+Select-String "TIMEOUT"
+->Tìm kiếm từ khóa "TIMEOUT" bên trong nội dung các file đó
+Where-Object { $_ -notmatch "NOT TIMEOUT" }
+->Lọc và loại bỏ những dòng có chứa cụm từ "NOT TIMEOUT" để tránh đếm nhầm
+.count
+->Đếm và trả về tổng số lượng dòng lỗi thực tế còn lại
+-GB:find -type f -name *.log |xargs grep -i "TIMEOUT" | grep -v -i "NOT TIMEOUT"| wc -l
+find -type f -name *.log
+->Tìm tất cả file .log.
+xargs grep -i "TIMEOUT"
+->Tìm các dòng chứa TIMEOUT
+grep -v -i "NOT TIMEOUT"
+->Lọc bỏ các dòng chứa NOT TIMEOUT
+wc -l
+->Đếm tổng số dòng kết quả.
+4.So sánh + Kết luận
+-PS: Xử lý dạng đối tượng (object-oriented). Dựa vào các thuộc tính của đối tượng file và chuỗi, an toàn với ký tự đặc biệt nhưng cú pháp dài.
+-GB: Xử lý dạng văn bản thuần túy (text streams) kết hợp các lệnh Unix (find, grep, wc). Cực kỳ ngắn gọn, tốc độ nhanh nhưng nhạy cảm với khoảng trắng trong tên file.
